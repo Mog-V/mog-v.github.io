@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Alamofire | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="mog,swift,swift开发,swift教程,swift入门,ReactiveCocoa,Rxswift" />
+  
+
+  <meta name="description" content="Alamofire 上传图片（文件）
+最近AFNetworking的作者Matt Thompson 提出了一个新的类似AFNetworking的网络基础库，并且专门使用最新的Swift语言写的，名为 Alamofire.Alamofire 在文件上传时提供了简单的方法 upload，我们可以使用它完成文件上传功能
+
+客户端代码：
+1234567891011121314151617181920212">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Alamofire">
+<meta property="og:url" content="http://yoursite.com/2016/05/14/swift-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Alamofire 上传图片（文件）
+最近AFNetworking的作者Matt Thompson 提出了一个新的类似AFNetworking的网络基础库，并且专门使用最新的Swift语言写的，名为 Alamofire.Alamofire 在文件上传时提供了简单的方法 upload，我们可以使用它完成文件上传功能
+
+客户端代码：
+1234567891011121314151617181920212">
+<meta property="og:updated_time" content="2016-05-14T16:54:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Alamofire">
+<meta name="twitter:description" content="Alamofire 上传图片（文件）
+最近AFNetworking的作者Matt Thompson 提出了一个新的类似AFNetworking的网络基础库，并且专门使用最新的Swift语言写的，名为 Alamofire.Alamofire 在文件上传时提供了简单的方法 upload，我们可以使用它完成文件上传功能
+
+客户端代码：
+1234567891011121314151617181920212">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=eaf5ab1e" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?2d037ccf12045de2bbde7d1cb3c60391";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">首页</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">首页</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/link/"
+            target="_self"
+            >
+            友链
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Alamofire-上传图片（文件）"><span class="toc-text">Alamofire 上传图片（文件）</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-swift-1" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Alamofire</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2016.05.14</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>John Doe</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/swift/">swift</a>
+  </span>
+
+
+
+      
+
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="Alamofire-上传图片（文件）"><a href="#Alamofire-上传图片（文件）" class="headerlink" title="Alamofire 上传图片（文件）"></a>Alamofire 上传图片（文件）</h1><blockquote>
+<p>最近AFNetworking的作者Matt Thompson 提出了一个新的类似AFNetworking的网络基础库，并且专门使用最新的Swift语言写的，名为 Alamofire.<br>Alamofire 在文件上传时提供了简单的方法 upload，我们可以使用它完成文件上传功能</p>
+</blockquote>
+<p>客户端代码：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">load</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"开始上传"</span>)</span><br><span class="line">        <span class="keyword">let</span> file = <span class="type">NSBundle</span>.mainBundle().pathForResource(<span class="string">"Mog"</span>, ofType: <span class="string">"png"</span>)</span><br><span class="line">        <span class="keyword">let</span> imageData = <span class="type">UIImagePNGRepresentation</span>(<span class="type">UIImage</span>(contentsOfFile: file!)!)</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="type">Alamofire</span>.upload(.<span class="type">POST</span>, <span class="string">"http://api.laravel.com/user/file"</span>, multipartFormData: &#123; (data) <span class="keyword">in</span></span><br><span class="line">            <span class="comment">/**</span><br><span class="line">             *   data: 图片， name: 服务器接收文件的参数名（判断是哪一张图片）, fileName: 服务器获取到图片的名称， mimeType： 文件类型</span><br><span class="line">             */</span></span><br><span class="line">            data.appendBodyPart(data: imageData!, name: <span class="string">"file"</span>, fileName: <span class="string">"fileasdsad"</span>, mimeType: <span class="string">"image/*"</span>)</span><br><span class="line">            <span class="comment">//	 TO DO ...   这里传递更多参数</span></span><br><span class="line">            &#125;) &#123; (result) <span class="keyword">in</span></span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"数据准备完成；"</span>)</span><br><span class="line">                <span class="keyword">switch</span> result &#123;</span><br><span class="line">                <span class="keyword">case</span> .<span class="type">Success</span>(<span class="keyword">let</span> upload, <span class="number">_</span>, <span class="number">_</span>):</span><br><span class="line"><span class="comment">//                    case .Success(request: Request, streamingFromDisk: Bool, streamFileURL: NSURL?):</span></span><br><span class="line">                    upload.responseString(completionHandler: &#123; (respone) <span class="keyword">in</span></span><br><span class="line">                        <span class="built_in">print</span>(respone)</span><br><span class="line">                    &#125;)</span><br><span class="line">                <span class="keyword">case</span> .<span class="type">Failure</span>(<span class="keyword">let</span> err):</span><br><span class="line">                    <span class="built_in">print</span>(err)</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>服务器如何接收？<br>以php为例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//	 'file' 对应客户端的name字段名</span></span><br><span class="line">$file = <span class="keyword">isset</span>($_FILES[<span class="string">'file'</span>]) ? $_FILE[<span class="string">'file'</span>] : <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>更多内容可以关注我的个人博客：<a href="http://mog.name" target="_blank" rel="external">Mog的个人博客</a></p>
+</blockquote>
+
+    
+  </div>
+</article>
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/link/"
+              target="_self"
+              >
+              友链
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+  <section class="duoshuo-comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="" data-title="Alamofire" data-url="http://yoursite.com/2016/05/14/swift-1/index.html"></div>
+    <!-- 多说评论框 end -->
+  </section>
+
+
+
+
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"mog-v"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
