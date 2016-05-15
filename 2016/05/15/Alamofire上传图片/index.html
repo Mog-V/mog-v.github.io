@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="mog,swift,swift开发,swift教程,swift入门,ReactiveCocoa,Rxswift" />
+  <meta name="keywords" content="Alamofire,AFNetworking," />
 
 
 
@@ -86,15 +86,16 @@
 
 
 
-<meta name="description" content="曾担任 微阿里（北京）科技有限公司 、微阿里（北京）品牌管理有限公司 CEO 、沈阳盾盾科技有限公司 创始人 之一， 曾开发过 Andorid，PHP，Node，H5 项目，现主要从事Swift开发，从swift1.2开始使用swift代替其他语言进行完整的项目开发，精通IOS开发，拥有Mac软件开发经验，目前正在利用swift进行服务端开发...   --- By Mog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Mog's Blog">
-<meta property="og:url" content="http://blog.mog.name/index.html">
+<meta name="description" content="IOS的网络请求中的GET、POST方法，以及文件或图片等资源的下载大家应该都很熟悉，但是可能有一部分盆友不知道如何上传文件，以及附带参数上传文件；在OC中使用AFNetworking上传图片的资料在网上有很多，但是swift作为一门新的语言，相关的资料还很少；这里我就给大家Alamofire 带参数上传图片的Demo（Alamofire 就是 Swift版的 AFNetworking）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Alamofire上传图片">
+<meta property="og:url" content="http://blog.mog.name/2016/05/15/Alamofire上传图片/index.html">
 <meta property="og:site_name" content="Mog's Blog">
-<meta property="og:description" content="曾担任 微阿里（北京）科技有限公司 、微阿里（北京）品牌管理有限公司 CEO 、沈阳盾盾科技有限公司 创始人 之一， 曾开发过 Andorid，PHP，Node，H5 项目，现主要从事Swift开发，从swift1.2开始使用swift代替其他语言进行完整的项目开发，精通IOS开发，拥有Mac软件开发经验，目前正在利用swift进行服务端开发...   --- By Mog">
+<meta property="og:description" content="IOS的网络请求中的GET、POST方法，以及文件或图片等资源的下载大家应该都很熟悉，但是可能有一部分盆友不知道如何上传文件，以及附带参数上传文件；在OC中使用AFNetworking上传图片的资料在网上有很多，但是swift作为一门新的语言，相关的资料还很少；这里我就给大家Alamofire 带参数上传图片的Demo（Alamofire 就是 Swift版的 AFNetworking）。">
+<meta property="og:updated_time" content="2016-05-15T09:28:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mog's Blog">
-<meta name="twitter:description" content="曾担任 微阿里（北京）科技有限公司 、微阿里（北京）品牌管理有限公司 CEO 、沈阳盾盾科技有限公司 创始人 之一， 曾开发过 Andorid，PHP，Node，H5 项目，现主要从事Swift开发，从swift1.2开始使用swift代替其他语言进行完整的项目开发，精通IOS开发，拥有Mac软件开发经验，目前正在利用swift进行服务端开发...   --- By Mog">
+<meta name="twitter:title" content="Alamofire上传图片">
+<meta name="twitter:description" content="IOS的网络请求中的GET、POST方法，以及文件或图片等资源的下载大家应该都很熟悉，但是可能有一部分盆友不知道如何上传文件，以及附带参数上传文件；在OC中使用AFNetworking上传图片的资料在网上有很多，但是swift作为一门新的语言，相关的资料还很少；这里我就给大家Alamofire 带参数上传图片的Demo（Alamofire 就是 Swift版的 AFNetworking）。">
 
 
 
@@ -112,7 +113,7 @@
   };
 </script>
 
-  <title> Mog's Blog </title>
+  <title> Alamofire上传图片 | Mog's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="">
@@ -143,9 +144,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -232,9 +231,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -254,10 +253,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/05/15/Alamofire上传图片/" itemprop="url">
-                  Alamofire上传图片
-                </a>
+                Alamofire上传图片
               
             
           </h1>
@@ -323,44 +319,76 @@
       
 
       
-        
-          <blockquote>
-<p>IOS的网络请求中的GET、POST方法，以及文件或图片等资源的下载大家应该都很熟悉，但是可能有一部分盆友不知道如何上传文件，以及附带参数上传文件；<br>在OC中使用<a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a>上传图片的资料在网上有很多，但是swift作为一门新的语言，相关的资料还很少；<br>这里我就给大家<a href="https://github.com/Alamofire/Alamofire">Alamofire</a> 带参数上传图片的Demo（<a href="https://github.com/Alamofire/Alamofire">Alamofire</a> 就是 Swift版的 <a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a>）。</p>
+        <blockquote>
+<p>IOS的网络请求中的GET、POST方法，以及文件或图片等资源的下载大家应该都很熟悉，但是可能有一部分盆友不知道如何上传文件，以及附带参数上传文件；<br>在OC中使用<a href="https://github.com/AFNetworking/AFNetworking" target="_blank" rel="external">AFNetworking</a>上传图片的资料在网上有很多，但是swift作为一门新的语言，相关的资料还很少；<br>这里我就给大家<a href="https://github.com/Alamofire/Alamofire" target="_blank" rel="external">Alamofire</a> 带参数上传图片的Demo（<a href="https://github.com/Alamofire/Alamofire" target="_blank" rel="external">Alamofire</a> 就是 Swift版的 <a href="https://github.com/AFNetworking/AFNetworking" target="_blank" rel="external">AFNetworking</a>）。</p>
 </blockquote>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/15/Alamofire上传图片/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+<a id="more"></a>
+<p>Alamofire 在文件上传时提供了简单的方法 upload，我们可以使用它完成文件上传功能</p>
+<h3 id="客户端代码："><a href="#客户端代码：" class="headerlink" title="客户端代码："></a>客户端代码：</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">load</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"开始上传"</span>)</span><br><span class="line">        <span class="keyword">let</span> file = <span class="type">NSBundle</span>.mainBundle().pathForResource(<span class="string">"Mog"</span>, ofType: <span class="string">"png"</span>)</span><br><span class="line">        <span class="keyword">let</span> imageData = <span class="type">UIImagePNGRepresentation</span>(<span class="type">UIImage</span>(contentsOfFile: file!)!)</span><br><span class="line"></span><br><span class="line">        <span class="type">Alamofire</span>.upload(.<span class="type">POST</span>, <span class="string">"http://api.laravel.com/user/file"</span>, multipartFormData: &#123; (data) <span class="keyword">in</span></span><br><span class="line">            <span class="comment">/**</span><br><span class="line">             *   data: 图片， name: 服务器接收文件的参数名（判断是哪一张图片）, fileName: 服务器获取到图片的名称， mimeType： 文件类型</span><br><span class="line">             */</span></span><br><span class="line">            data.appendBodyPart(data: imageData!, name: <span class="string">"file"</span>, fileName: <span class="string">"fileasdsad"</span>, mimeType: <span class="string">"image/*"</span>)</span><br><span class="line">            <span class="comment">//	 TO DO ...   这里传递更多参数</span></span><br><span class="line">            &#125;) &#123; (result) <span class="keyword">in</span></span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"数据准备完成；"</span>)</span><br><span class="line">                <span class="keyword">switch</span> result &#123;</span><br><span class="line">                <span class="keyword">case</span> .<span class="type">Success</span>(<span class="keyword">let</span> upload, <span class="number">_</span>, <span class="number">_</span>):</span><br><span class="line"><span class="comment">//                    case .Success(request: Request, streamingFromDisk: Bool, streamFileURL: NSURL?):</span></span><br><span class="line">                    upload.responseString(completionHandler: &#123; (respone) <span class="keyword">in</span></span><br><span class="line">                        <span class="built_in">print</span>(respone)</span><br><span class="line">                    &#125;)</span><br><span class="line">                <span class="keyword">case</span> .<span class="type">Failure</span>(<span class="keyword">let</span> err):</span><br><span class="line">                    <span class="built_in">print</span>(err)</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="服务器代码"><a href="#服务器代码" class="headerlink" title="服务器代码"></a>服务器代码</h3><p>以php为例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//	 'file' 对应客户端的name字段名</span></span><br><span class="line">$file = <span class="keyword">isset</span>($_FILES[<span class="string">'file'</span>]) ? $_FILE[<span class="string">'file'</span>] : <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
         
       
     </div>
 
     <div>
       
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/pay_wx.jpg" alt="Mog WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/pay_ali.jpeg" alt="Mog Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
     </div>
+  </div>
 
-    <div>
+
       
     </div>
 
     <footer class="post-footer">
       
-
+        <div class="post-tags">
+          
+            <a href="/tags/Alamofire/" rel="tag">#Alamofire</a>
+          
+            <a href="/tags/AFNetworking/" rel="tag">#AFNetworking</a>
+          
+        </div>
       
 
       
+
       
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -368,6 +396,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/15/Alamofire上传图片/"
+           data-title="Alamofire上传图片" data-url="http://blog.mog.name/2016/05/15/Alamofire上传图片/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -387,8 +423,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/mog.gif"
@@ -483,6 +528,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端代码："><span class="nav-number">1.</span> <span class="nav-text">客户端代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器代码"><span class="nav-number">2.</span> <span class="nav-text">服务器代码</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -586,6 +642,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 

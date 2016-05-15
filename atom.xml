@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Mog&#39;s Blog</title>
+  <subtitle>Swift开发者</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://blog.mog.name/"/>
+  <updated>2016-05-15T09:28:16.000Z</updated>
+  <id>http://blog.mog.name/</id>
+  
+  <author>
+    <name>Mog</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Alamofire上传图片</title>
+    <link href="http://blog.mog.name/2016/05/15/Alamofire%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87/"/>
+    <id>http://blog.mog.name/2016/05/15/Alamofire上传图片/</id>
+    <published>2016-05-15T09:16:58.000Z</published>
+    <updated>2016-05-15T09:28:16.000Z</updated>
+    
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;IOS的网络请求中的GET、POST方法，以及文件或图片等资源的下载大家应该都很熟悉，但是可能有一部分盆友不知道如何上传文件，以及附带参数上传文件；&lt;br&gt;在OC中使用&lt;a href=&quot;https://github.com/AFNetworking/AFNetworking&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;AFNetworking&lt;/a&gt;上传图片的资料在网上有很多，但是swift作为一门新的语言，相关的资料还很少；&lt;br&gt;这里我就给大家&lt;a href=&quot;https://github.com/Alamofire/Alamofire&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Alamofire&lt;/a&gt; 带参数上传图片的Demo（&lt;a href=&quot;https://github.com/Alamofire/Alamofire&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Alamofire&lt;/a&gt; 就是 Swift版的 &lt;a href=&quot;https://github.com/AFNetworking/AFNetworking&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;AFNetworking&lt;/a&gt;）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;Alamofire 在文件上传时提供了简单的方法 upload，我们可以使用它完成文件上传功能&lt;/p&gt;
+&lt;h3 id=&quot;客户端代码：&quot;&gt;&lt;a href=&quot;#客户端代码：&quot; class=&quot;headerlink&quot; title=&quot;客户端代码：&quot;&gt;&lt;/a&gt;客户端代码：&lt;/h3&gt;&lt;figure class=&quot;highlight swift&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;()&lt;/span&gt;&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;built_in&quot;&gt;print&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&quot;开始上传&quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; file = &lt;span class=&quot;type&quot;&gt;NSBundle&lt;/span&gt;.mainBundle().pathForResource(&lt;span class=&quot;string&quot;&gt;&quot;Mog&quot;&lt;/span&gt;, ofType: &lt;span class=&quot;string&quot;&gt;&quot;png&quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; imageData = &lt;span class=&quot;type&quot;&gt;UIImagePNGRepresentation&lt;/span&gt;(&lt;span class=&quot;type&quot;&gt;UIImage&lt;/span&gt;(contentsOfFile: file!)!)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;type&quot;&gt;Alamofire&lt;/span&gt;.upload(.&lt;span class=&quot;type&quot;&gt;POST&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&quot;http://api.laravel.com/user/file&quot;&lt;/span&gt;, multipartFormData: &amp;#123; (data) &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;comment&quot;&gt;/**&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;             *   data: 图片， name: 服务器接收文件的参数名（判断是哪一张图片）, fileName: 服务器获取到图片的名称， mimeType： 文件类型&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;             */&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            data.appendBodyPart(data: imageData!, name: &lt;span class=&quot;string&quot;&gt;&quot;file&quot;&lt;/span&gt;, fileName: &lt;span class=&quot;string&quot;&gt;&quot;fileasdsad&quot;&lt;/span&gt;, mimeType: &lt;span class=&quot;string&quot;&gt;&quot;image/*&quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;comment&quot;&gt;//	 TO DO ...   这里传递更多参数&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &amp;#125;) &amp;#123; (result) &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                &lt;span class=&quot;built_in&quot;&gt;print&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&quot;数据准备完成；&quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                &lt;span class=&quot;keyword&quot;&gt;switch&lt;/span&gt; result &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                &lt;span class=&quot;keyword&quot;&gt;case&lt;/span&gt; .&lt;span class=&quot;type&quot;&gt;Success&lt;/span&gt;(&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; upload, &lt;span class=&quot;number&quot;&gt;_&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;_&lt;/span&gt;):&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;//                    case .Success(request: Request, streamingFromDisk: Bool, streamFileURL: NSURL?):&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                    upload.responseString(completionHandler: &amp;#123; (respone) &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                        &lt;span class=&quot;built_in&quot;&gt;print&lt;/span&gt;(respone)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                    &amp;#125;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                &lt;span class=&quot;keyword&quot;&gt;case&lt;/span&gt; .&lt;span class=&quot;type&quot;&gt;Failure&lt;/span&gt;(&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; err):&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                    &lt;span class=&quot;built_in&quot;&gt;print&lt;/span&gt;(err)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                    &lt;span class=&quot;keyword&quot;&gt;break&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;服务器代码&quot;&gt;&lt;a href=&quot;#服务器代码&quot; class=&quot;headerlink&quot; title=&quot;服务器代码&quot;&gt;&lt;/a&gt;服务器代码&lt;/h3&gt;&lt;p&gt;以php为例：&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;//	 &#39;file&#39; 对应客户端的name字段名&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$file = &lt;span class=&quot;keyword&quot;&gt;isset&lt;/span&gt;($_FILES[&lt;span class=&quot;string&quot;&gt;&#39;file&#39;&lt;/span&gt;]) ? $_FILE[&lt;span class=&quot;string&quot;&gt;&#39;file&#39;&lt;/span&gt;] : &lt;span class=&quot;keyword&quot;&gt;null&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;IOS的网络请求中的GET、POST方法，以及文件或图片等资源的下载大家应该都很熟悉，但是可能有一部分盆友不知道如何上传文件，以及附带参数上传文件；&lt;br&gt;在OC中使用&lt;a href=&quot;https://github.com/AFNetworking/AFNetworking&quot;&gt;AFNetworking&lt;/a&gt;上传图片的资料在网上有很多，但是swift作为一门新的语言，相关的资料还很少；&lt;br&gt;这里我就给大家&lt;a href=&quot;https://github.com/Alamofire/Alamofire&quot;&gt;Alamofire&lt;/a&gt; 带参数上传图片的Demo（&lt;a href=&quot;https://github.com/Alamofire/Alamofire&quot;&gt;Alamofire&lt;/a&gt; 就是 Swift版的 &lt;a href=&quot;https://github.com/AFNetworking/AFNetworking&quot;&gt;AFNetworking&lt;/a&gt;）。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="swift" scheme="http://blog.mog.name/categories/swift/"/>
+    
+    
+      <category term="Alamofire" scheme="http://blog.mog.name/tags/Alamofire/"/>
+    
+      <category term="AFNetworking" scheme="http://blog.mog.name/tags/AFNetworking/"/>
+    
+  </entry>
+  
+</feed>
