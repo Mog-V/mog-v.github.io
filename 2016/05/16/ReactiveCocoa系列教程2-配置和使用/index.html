@@ -1,0 +1,773 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ReactiveCocoa,FP,FRP,函数式编程,响应式编程,函数响应编程," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Mog's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="在编写iOS代码时，我们的大部分代码都是在响应一些事件：按钮点击、接收网络消息、属性变化等等。但是这些事件在代码中的表现形式却不一样：如target-action、代理方法、KVO、回调或其它。ReactiveCocoa的目的就是定义一个统一的事件处理接口，这样它们可以非常简单地进行链接、过滤和组合。
+
+ReactiveCocoa结合了一些编程模式：
+
+函数式编程：利用高阶函数，即将函数作为其它">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ReactiveCocoa系列教程2-配置和使用">
+<meta property="og:url" content="http://blog.mog.name/2016/05/16/ReactiveCocoa系列教程2-配置和使用/index.html">
+<meta property="og:site_name" content="Mog's Blog">
+<meta property="og:description" content="在编写iOS代码时，我们的大部分代码都是在响应一些事件：按钮点击、接收网络消息、属性变化等等。但是这些事件在代码中的表现形式却不一样：如target-action、代理方法、KVO、回调或其它。ReactiveCocoa的目的就是定义一个统一的事件处理接口，这样它们可以非常简单地进行链接、过滤和组合。
+
+ReactiveCocoa结合了一些编程模式：
+
+函数式编程：利用高阶函数，即将函数作为其它">
+<meta property="og:image" content="http://7xr4xo.com1.z0.glb.clouddn.com/2016-04-16-ReactiveCocoa.png">
+<meta property="og:updated_time" content="2016-05-16T01:26:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ReactiveCocoa系列教程2-配置和使用">
+<meta name="twitter:description" content="在编写iOS代码时，我们的大部分代码都是在响应一些事件：按钮点击、接收网络消息、属性变化等等。但是这些事件在代码中的表现形式却不一样：如target-action、代理方法、KVO、回调或其它。ReactiveCocoa的目的就是定义一个统一的事件处理接口，这样它们可以非常简单地进行链接、过滤和组合。
+
+ReactiveCocoa结合了一些编程模式：
+
+函数式编程：利用高阶函数，即将函数作为其它">
+<meta name="twitter:image" content="http://7xr4xo.com1.z0.glb.clouddn.com/2016-04-16-ReactiveCocoa.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> ReactiveCocoa系列教程2-配置和使用 | Mog's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?2d037ccf12045de2bbde7d1cb3c60391";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Mog's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Swift开发者</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ReactiveCocoa系列教程2-配置和使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-16T09:23:06+08:00" content="2016-05-16">
+              2016-05-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/swift/" itemprop="url" rel="index">
+                    <span itemprop="name">swift</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/16/ReactiveCocoa系列教程2-配置和使用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/16/ReactiveCocoa系列教程2-配置和使用/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="http://7xr4xo.com1.z0.glb.clouddn.com/2016-04-16-ReactiveCocoa.png" rel="gallery_cio9byqz10000ee0q2q99vccv"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="http://7xr4xo.com1.z0.glb.clouddn.com/2016-04-16-ReactiveCocoa.png" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
+
+      
+        <blockquote>
+<p>在编写iOS代码时，我们的大部分代码都是在响应一些事件：按钮点击、接收网络消息、属性变化等等。但是这些事件在代码中的表现形式却不一样：如target-action、代理方法、KVO、回调或其它。ReactiveCocoa的目的就是定义一个统一的事件处理接口，这样它们可以非常简单地进行链接、过滤和组合。</p>
+</blockquote>
+<p>ReactiveCocoa结合了一些编程模式：</p>
+<ol>
+<li>函数式编程：利用高阶函数，即将函数作为其它函数的参数。</li>
+<li>响应式编程：关注于数据流及变化的传播。</li>
+</ol>
+<blockquote>
+<p>基于以上两点，ReactiveCocoa被当成是函数响应编程(Functional Reactive Programming, FRP)框架。我们将在下面以实例来看看ReactiveCocoa的实用价值。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="添加ReactiveCocoa框架"><a href="#添加ReactiveCocoa框架" class="headerlink" title="添加ReactiveCocoa框架"></a>添加ReactiveCocoa框架</h2><p>添加ReactiveCocoa框架到我们工程的最简单的方法是使用Cocoapods。我们先关闭ReactivePlayground工程。Cocoapods会创建一个Xcode workspace，它会替代我们的原始工程文件。<br>首先创建一个名为Podfile的空文件，打开并添加如下信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">source &apos;https://github.com/CocoaPods/Specs.git&apos;</span><br><span class="line">platform :ios, &apos;8.0&apos;</span><br><span class="line">use_frameworks!</span><br><span class="line"></span><br><span class="line">pod &apos;ReactiveCocoa&apos;</span><br></pre></td></tr></table></figure>
+<p>配置完成后保存文件，打开终端并转到工程所在目录，然后输入以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod install --verboser --no-repo-update</span><br></pre></td></tr></table></figure>
+<p>安装完成后，Cocoapods会创建了一个Xcode workspace，同时将框架整合到了我们的工程中。打开新生成的workspace文件(RWReactivePlayground.xcworkspace)，双击运行workspace打开工程<br>如果</p>
+<p><strong> 注意：swift安装好pod第三方库之后一般需要手动添加相应的.framework;添加位置在工程的general &gt; Linked Frameworks and Libraries 或者在 Build Phasses &gt; Link Binary With Libraries | 如下图： </strong><br><img src="http://7xr4xo.com1.z0.glb.clouddn.com/2016-04-16-QQ20160416-1@2x.png" alt="QQ20160416-1@2x"><br><img src="http://7xr4xo.com1.z0.glb.clouddn.com/2016-04-16-QQ20160416-2@2x.png" alt="QQ20160416-2@2x"><br><img src="http://7xr4xo.com1.z0.glb.clouddn.com/2016-04-16-QQ20160416-3@2x.png" alt="QQ20160416-3@2x"></p>
+<h2 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h2><p>经过上面的步骤，我们的环境应该已经搭建完成了。<br>接下来开始使用ReactiveCocoa<br>首先打开我们默认的ViewController.swift，在顶部引用ReactiveCocoa库<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ReactiveCocoa</span><br></pre></td></tr></table></figure></p>
+<p>然后我们在viewdidload中创建一个TextField,并且使用ReactiveCocoa监听textfiled值变化事件</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.viewDidLoad()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> tv1 = <span class="type">UITextField</span>(frame: <span class="type">CGRect</span>(x: <span class="number">50</span>, y: <span class="number">50</span>, width: <span class="number">200</span>, height: <span class="number">30</span>))</span><br><span class="line">        tv1.backgroundColor = <span class="type">UIColor</span>(red: <span class="number">0.9</span>, green: <span class="number">0.9</span>, blue: <span class="number">0.9</span>, alpha: <span class="number">1</span>)</span><br><span class="line">        tv1.placeholder = <span class="string">"用户名"</span></span><br><span class="line">        view.addSubview(tv1)</span><br><span class="line">        </span><br><span class="line">        tv1.rac_textSignal().subscribeNext &#123; (text) <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(text)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>运行程序，我们会看到输出结果（我们每一个输入键入后都会调用到这个事件，并且返回当前textfield的值）：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">D</span></span><br><span class="line"><span class="type">Ds</span></span><br><span class="line"><span class="type">Dsa</span></span><br><span class="line"><span class="type">Dsad</span></span><br><span class="line"><span class="type">Dsada</span></span><br><span class="line"><span class="type">Dsadas</span></span><br><span class="line"><span class="type">Dsadasd</span></span><br><span class="line"><span class="type">Dsadasds</span></span><br><span class="line"><span class="type">Dsadasdsa</span></span><br></pre></td></tr></table></figure>
+<p>我们可以看到，每次在text field中输入时，都会执行block中的代码。没有target-action，没有代理，只有信号与block。是不是很棒？<br>ReactiveCocoa信号发送一个事件流到它们的订阅者中。我们需要知道三种类型的事件：next, error和completed。一个信号可能由于error事件或completed事件而终止，在此之前它会发送很多个next事件。在这一部分中，我们将重点关注next事件。在学习关于error和completed事件前，请仔细阅读第二部分。<br>RACSignal有许多方法用于订阅这些不同的事件类型。每个方法会有一个或多个block，每个block执行不同的逻辑处理。在上面这个例子中，我们看到subscribeNext:方法提供了一个响应next事件的block。<br>ReactiveCocoa框架通过类别来为大部分标准UIKit控件添加信号，以便这些控件可以添加其相应事件的订阅，如上面的UITextField包含了rac_textSignal属性。<br>理论讲得差不多了，我们继续吧！！！</p>
+<p>ReactiveCocoa有大量的操作右用于处理事件流。例如，如果我们只对长度大于3的用户名感兴趣，则我们可以使用filter操作。在viewDidLoad中更新我们的代码如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tv1.rac_textSignal().<span class="built_in">filter</span> &#123; (text) -&gt; <span class="type">Bool</span> <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">return</span> text.lengthOfBytesUsingEncoding(<span class="type">NSUTF8StringEncoding</span>) &gt; <span class="number">3</span></span><br><span class="line">        &#125; .subscribeNext &#123; (text) <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(text)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>运行并在用户名输入框中输入”reactive cocoa”，我们可以看到控制台会有如下输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">reac</span><br><span class="line">react</span><br><span class="line">reacti</span><br><span class="line">reactiv</span><br><span class="line">reactive</span><br><span class="line">reactive</span><br><span class="line">reactive c</span><br><span class="line">reactive co</span><br><span class="line">reactive coc</span><br><span class="line">reactive coco</span><br><span class="line">reactive cocoa</span><br></pre></td></tr></table></figure>
+<p>可以看到当长度小于3时，并不执行后续的操作。通过这种方式，我们创建了一个简单的管道。这就是响应式编程的实质，我们将我们程序的功能表示为数据流的形式。我们可以将上述调用表示为以下图例：<br><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/FilterPipeline.png" alt="图片示例"><br>从上图中我们可以看到rac_textSignal是事件的初始源头。通过filter的数据流只有在其长度大于3时，才会被传递到下一处理流程中。管道的最后一步是subscribeNext:，在这个block中，我们记录日志。<br>在这里需要注意的是filter操作的输出仍然是一个RACSignal对象。我们可以将上面这段管道处理拆分成如下代码：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> usernameSourceSignal = tv1.rac_textSignal();</span><br><span class="line">        <span class="keyword">let</span> filteredUsername = usernameSourceSignal.<span class="built_in">filter</span> &#123; (text) -&gt; <span class="type">Bool</span> <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">return</span> text.lengthOfBytesUsingEncoding(<span class="type">NSUTF8StringEncoding</span>) &gt; <span class="number">3</span></span><br><span class="line">        &#125;</span><br><span class="line">        filteredUsername.subscribeNext &#123; (text) <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(text)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>因为RACSignal对象的每个操作都返回一个RACSignal对象，所以我们不需要使用变量就可以构建一个管道。</p>
+<h2 id="事件是什么"><a href="#事件是什么" class="headerlink" title="事件是什么"></a>事件是什么</h2><p>目前为止，我们已经描述了3种不同的事件类型，但还没有深入这些事件的结构。有趣的是，事件可以包含任何东西。为了证明这一点，我们在上面的管道中加入另一个操作。更新我们的代码：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tv1.rac_textSignal().<span class="built_in">map</span> &#123; (text) -&gt; <span class="type">AnyObject</span>! <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">return</span> text.lengthOfBytesUsingEncoding(<span class="type">NSUTF8StringEncoding</span>)</span><br><span class="line">        &#125;.<span class="built_in">filter</span> &#123; (length) -&gt; <span class="type">Bool</span> <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">return</span> length <span class="keyword">as</span>! <span class="type">Int</span> &gt; <span class="number">3</span></span><br><span class="line">        &#125; .subscribeNext &#123; (length) <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(length)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>编译并运行，我们会发现控制台输出如下信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td></tr></table></figure>
+<p>新添加的map操作使用提供的block来转换事件数据。对于收到的每一个next事件，都会运行给定的block，并将返回值作为next事件发送。在上面的代码中，map操作获取一个NSString输入，并将其映射为一个NSNumber对象，并返回。下图演示了这个管道处理：<br><img src="http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/FilterAndMapPipeline.png" alt=""><br>我们可以看到，map操作后的每一步接收的都是一个NSNumber对象。我们可以使用map操作来转换我们想要的数据，只需要它是一个对象。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/pay_wx.jpg" alt="Mog WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/pay_ali.jpeg" alt="Mog Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ReactiveCocoa/" rel="tag">#ReactiveCocoa</a>
+          
+            <a href="/tags/FP/" rel="tag">#FP</a>
+          
+            <a href="/tags/FRP/" rel="tag">#FRP</a>
+          
+            <a href="/tags/函数式编程/" rel="tag">#函数式编程</a>
+          
+            <a href="/tags/响应式编程/" rel="tag">#响应式编程</a>
+          
+            <a href="/tags/函数响应编程/" rel="tag">#函数响应编程</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/15/ReactiveCocoa系列教程1-基本概念/" rel="next" title="ReactiveCocoa系列教程1-基本概念">
+                <i class="fa fa-chevron-left"></i> ReactiveCocoa系列教程1-基本概念
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/16/ReactiveCocoa系列教程2-配置和使用/"
+           data-title="ReactiveCocoa系列教程2-配置和使用" data-url="http://blog.mog.name/2016/05/16/ReactiveCocoa系列教程2-配置和使用/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/mog.gif"
+               alt="Mog" />
+          <p class="site-author-name" itemprop="name">Mog</p>
+          <p class="site-description motion-element" itemprop="description">曾担任 微阿里（北京）科技有限公司 、微阿里（北京）品牌管理有限公司 CEO 、沈阳盾盾科技有限公司 创始人 之一， 曾从事过 VB，Andorid，PHP，Node，H5 项目开发，现主要从事Swift开发，从swift1.2开始使用swift代替其他语言进行完整的项目开发，精通IOS开发，拥有Mac软件开发经验，目前正在利用swift进行服务端开发...   <br>--- By Mog</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Mog-V" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://stackoverflow.com/users/6132174/mog" target="_blank" title="Stack">
+                  
+                    <i class="fa fa-fw fa-coffee"></i>
+                  
+                  Stack
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/Moogoo_V" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/3053015477" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加ReactiveCocoa框架"><span class="nav-number">1.</span> <span class="nav-text">添加ReactiveCocoa框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始使用"><span class="nav-number">2.</span> <span class="nav-text">开始使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件是什么"><span class="nav-number">3.</span> <span class="nav-text">事件是什么</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mog</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"mog-v"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

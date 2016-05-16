@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.mog.name/"/>
-  <updated>2016-05-15T12:41:41.000Z</updated>
+  <updated>2016-05-16T01:26:47.000Z</updated>
   <id>http://blog.mog.name/</id>
   
   <author>
@@ -14,6 +14,84 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ReactiveCocoa系列教程2-配置和使用</title>
+    <link href="http://blog.mog.name/2016/05/16/ReactiveCocoa%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B2-%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/"/>
+    <id>http://blog.mog.name/2016/05/16/ReactiveCocoa系列教程2-配置和使用/</id>
+    <published>2016-05-16T01:23:06.000Z</published>
+    <updated>2016-05-16T01:26:47.000Z</updated>
+    
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;在编写iOS代码时，我们的大部分代码都是在响应一些事件：按钮点击、接收网络消息、属性变化等等。但是这些事件在代码中的表现形式却不一样：如target-action、代理方法、KVO、回调或其它。ReactiveCocoa的目的就是定义一个统一的事件处理接口，这样它们可以非常简单地进行链接、过滤和组合。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;ReactiveCocoa结合了一些编程模式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;函数式编程：利用高阶函数，即将函数作为其它函数的参数。&lt;/li&gt;
+&lt;li&gt;响应式编程：关注于数据流及变化的传播。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;基于以上两点，ReactiveCocoa被当成是函数响应编程(Functional Reactive Programming, FRP)框架。我们将在下面以实例来看看ReactiveCocoa的实用价值。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h2 id=&quot;添加ReactiveCocoa框架&quot;&gt;&lt;a href=&quot;#添加ReactiveCocoa框架&quot; class=&quot;headerlink&quot; title=&quot;添加ReactiveCocoa框架&quot;&gt;&lt;/a&gt;添加ReactiveCocoa框架&lt;/h2&gt;&lt;p&gt;添加ReactiveCocoa框架到我们工程的最简单的方法是使用Cocoapods。我们先关闭ReactivePlayground工程。Cocoapods会创建一个Xcode workspace，它会替代我们的原始工程文件。&lt;br&gt;首先创建一个名为Podfile的空文件，打开并添加如下信息：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;source &amp;apos;https://github.com/CocoaPods/Specs.git&amp;apos;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;platform :ios, &amp;apos;8.0&amp;apos;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;use_frameworks!&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;pod &amp;apos;ReactiveCocoa&amp;apos;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;配置完成后保存文件，打开终端并转到工程所在目录，然后输入以下命令：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pod install --verboser --no-repo-update&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;安装完成后，Cocoapods会创建了一个Xcode workspace，同时将框架整合到了我们的工程中。打开新生成的workspace文件(RWReactivePlayground.xcworkspace)，双击运行workspace打开工程&lt;br&gt;如果&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; 注意：swift安装好pod第三方库之后一般需要手动添加相应的.framework;添加位置在工程的general &amp;gt; Linked Frameworks and Libraries 或者在 Build Phasses &amp;gt; Link Binary With Libraries | 如下图： &lt;/strong&gt;&lt;br&gt;&lt;img src=&quot;http://7xr4xo.com1.z0.glb.clouddn.com/2016-04-16-QQ20160416-1@2x.png&quot; alt=&quot;QQ20160416-1@2x&quot;&gt;&lt;br&gt;&lt;img src=&quot;http://7xr4xo.com1.z0.glb.clouddn.com/2016-04-16-QQ20160416-2@2x.png&quot; alt=&quot;QQ20160416-2@2x&quot;&gt;&lt;br&gt;&lt;img src=&quot;http://7xr4xo.com1.z0.glb.clouddn.com/2016-04-16-QQ20160416-3@2x.png&quot; alt=&quot;QQ20160416-3@2x&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;开始使用&quot;&gt;&lt;a href=&quot;#开始使用&quot; class=&quot;headerlink&quot; title=&quot;开始使用&quot;&gt;&lt;/a&gt;开始使用&lt;/h2&gt;&lt;p&gt;经过上面的步骤，我们的环境应该已经搭建完成了。&lt;br&gt;接下来开始使用ReactiveCocoa&lt;br&gt;首先打开我们默认的ViewController.swift，在顶部引用ReactiveCocoa库&lt;br&gt;&lt;figure class=&quot;highlight swift&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; ReactiveCocoa&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;然后我们在viewdidload中创建一个TextField,并且使用ReactiveCocoa监听textfiled值变化事件&lt;/p&gt;
+&lt;figure class=&quot;highlight swift&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;viewDidLoad&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;()&lt;/span&gt;&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;super&lt;/span&gt;.viewDidLoad()&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; tv1 = &lt;span class=&quot;type&quot;&gt;UITextField&lt;/span&gt;(frame: &lt;span class=&quot;type&quot;&gt;CGRect&lt;/span&gt;(x: &lt;span class=&quot;number&quot;&gt;50&lt;/span&gt;, y: &lt;span class=&quot;number&quot;&gt;50&lt;/span&gt;, width: &lt;span class=&quot;number&quot;&gt;200&lt;/span&gt;, height: &lt;span class=&quot;number&quot;&gt;30&lt;/span&gt;))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        tv1.backgroundColor = &lt;span class=&quot;type&quot;&gt;UIColor&lt;/span&gt;(red: &lt;span class=&quot;number&quot;&gt;0.9&lt;/span&gt;, green: &lt;span class=&quot;number&quot;&gt;0.9&lt;/span&gt;, blue: &lt;span class=&quot;number&quot;&gt;0.9&lt;/span&gt;, alpha: &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        tv1.placeholder = &lt;span class=&quot;string&quot;&gt;&quot;用户名&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        view.addSubview(tv1)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        tv1.rac_textSignal().subscribeNext &amp;#123; (text) &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;built_in&quot;&gt;print&lt;/span&gt;(text)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;运行程序，我们会看到输出结果（我们每一个输入键入后都会调用到这个事件，并且返回当前textfield的值）：&lt;/p&gt;
+&lt;figure class=&quot;highlight swift&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;type&quot;&gt;D&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;type&quot;&gt;Ds&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;type&quot;&gt;Dsa&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;type&quot;&gt;Dsad&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;type&quot;&gt;Dsada&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;type&quot;&gt;Dsadas&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;type&quot;&gt;Dsadasd&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;type&quot;&gt;Dsadasds&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;type&quot;&gt;Dsadasdsa&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;我们可以看到，每次在text field中输入时，都会执行block中的代码。没有target-action，没有代理，只有信号与block。是不是很棒？&lt;br&gt;ReactiveCocoa信号发送一个事件流到它们的订阅者中。我们需要知道三种类型的事件：next, error和completed。一个信号可能由于error事件或completed事件而终止，在此之前它会发送很多个next事件。在这一部分中，我们将重点关注next事件。在学习关于error和completed事件前，请仔细阅读第二部分。&lt;br&gt;RACSignal有许多方法用于订阅这些不同的事件类型。每个方法会有一个或多个block，每个block执行不同的逻辑处理。在上面这个例子中，我们看到subscribeNext:方法提供了一个响应next事件的block。&lt;br&gt;ReactiveCocoa框架通过类别来为大部分标准UIKit控件添加信号，以便这些控件可以添加其相应事件的订阅，如上面的UITextField包含了rac_textSignal属性。&lt;br&gt;理论讲得差不多了，我们继续吧！！！&lt;/p&gt;
+&lt;p&gt;ReactiveCocoa有大量的操作右用于处理事件流。例如，如果我们只对长度大于3的用户名感兴趣，则我们可以使用filter操作。在viewDidLoad中更新我们的代码如下：&lt;/p&gt;
+&lt;figure class=&quot;highlight swift&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;tv1.rac_textSignal().&lt;span class=&quot;built_in&quot;&gt;filter&lt;/span&gt; &amp;#123; (text) -&amp;gt; &lt;span class=&quot;type&quot;&gt;Bool&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; text.lengthOfBytesUsingEncoding(&lt;span class=&quot;type&quot;&gt;NSUTF8StringEncoding&lt;/span&gt;) &amp;gt; &lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125; .subscribeNext &amp;#123; (text) &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;built_in&quot;&gt;print&lt;/span&gt;(text)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;运行并在用户名输入框中输入”reactive cocoa”，我们可以看到控制台会有如下输出：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;reac&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;react&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reacti&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reactiv&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reactive&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reactive&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reactive c&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reactive co&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reactive coc&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reactive coco&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reactive cocoa&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;可以看到当长度小于3时，并不执行后续的操作。通过这种方式，我们创建了一个简单的管道。这就是响应式编程的实质，我们将我们程序的功能表示为数据流的形式。我们可以将上述调用表示为以下图例：&lt;br&gt;&lt;img src=&quot;http://cdn4.raywenderlich.com/wp-content/uploads/2014/01/FilterPipeline.png&quot; alt=&quot;图片示例&quot;&gt;&lt;br&gt;从上图中我们可以看到rac_textSignal是事件的初始源头。通过filter的数据流只有在其长度大于3时，才会被传递到下一处理流程中。管道的最后一步是subscribeNext:，在这个block中，我们记录日志。&lt;br&gt;在这里需要注意的是filter操作的输出仍然是一个RACSignal对象。我们可以将上面这段管道处理拆分成如下代码：&lt;/p&gt;
+&lt;figure class=&quot;highlight swift&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; usernameSourceSignal = tv1.rac_textSignal();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; filteredUsername = usernameSourceSignal.&lt;span class=&quot;built_in&quot;&gt;filter&lt;/span&gt; &amp;#123; (text) -&amp;gt; &lt;span class=&quot;type&quot;&gt;Bool&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; text.lengthOfBytesUsingEncoding(&lt;span class=&quot;type&quot;&gt;NSUTF8StringEncoding&lt;/span&gt;) &amp;gt; &lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        filteredUsername.subscribeNext &amp;#123; (text) &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;built_in&quot;&gt;print&lt;/span&gt;(text)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;因为RACSignal对象的每个操作都返回一个RACSignal对象，所以我们不需要使用变量就可以构建一个管道。&lt;/p&gt;
+&lt;h2 id=&quot;事件是什么&quot;&gt;&lt;a href=&quot;#事件是什么&quot; class=&quot;headerlink&quot; title=&quot;事件是什么&quot;&gt;&lt;/a&gt;事件是什么&lt;/h2&gt;&lt;p&gt;目前为止，我们已经描述了3种不同的事件类型，但还没有深入这些事件的结构。有趣的是，事件可以包含任何东西。为了证明这一点，我们在上面的管道中加入另一个操作。更新我们的代码：&lt;/p&gt;
+&lt;figure class=&quot;highlight swift&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;tv1.rac_textSignal().&lt;span class=&quot;built_in&quot;&gt;map&lt;/span&gt; &amp;#123; (text) -&amp;gt; &lt;span class=&quot;type&quot;&gt;AnyObject&lt;/span&gt;! &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; text.lengthOfBytesUsingEncoding(&lt;span class=&quot;type&quot;&gt;NSUTF8StringEncoding&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;.&lt;span class=&quot;built_in&quot;&gt;filter&lt;/span&gt; &amp;#123; (length) -&amp;gt; &lt;span class=&quot;type&quot;&gt;Bool&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; length &lt;span class=&quot;keyword&quot;&gt;as&lt;/span&gt;! &lt;span class=&quot;type&quot;&gt;Int&lt;/span&gt; &amp;gt; &lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125; .subscribeNext &amp;#123; (length) &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;built_in&quot;&gt;print&lt;/span&gt;(length)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;编译并运行，我们会发现控制台输出如下信息：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;新添加的map操作使用提供的block来转换事件数据。对于收到的每一个next事件，都会运行给定的block，并将返回值作为next事件发送。在上面的代码中，map操作获取一个NSString输入，并将其映射为一个NSNumber对象，并返回。下图演示了这个管道处理：&lt;br&gt;&lt;img src=&quot;http://cdn2.raywenderlich.com/wp-content/uploads/2014/01/FilterAndMapPipeline.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;我们可以看到，map操作后的每一步接收的都是一个NSNumber对象。我们可以使用map操作来转换我们想要的数据，只需要它是一个对象。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;在编写iOS代码时，我们的大部分代码都是在响应一些事件：按钮点击、接收网络消息、属性变化等等。但是这些事件在代码中的表现形式却不一样：如target-action、代理方法、KVO、回调或其它。ReactiveCocoa的目的就是定义一个统一的事件处理接口，这样它们可以非常简单地进行链接、过滤和组合。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;ReactiveCocoa结合了一些编程模式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;函数式编程：利用高阶函数，即将函数作为其它函数的参数。&lt;/li&gt;
+&lt;li&gt;响应式编程：关注于数据流及变化的传播。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;基于以上两点，ReactiveCocoa被当成是函数响应编程(Functional Reactive Programming, FRP)框架。我们将在下面以实例来看看ReactiveCocoa的实用价值。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="swift" scheme="http://blog.mog.name/categories/swift/"/>
+    
+    
+      <category term="ReactiveCocoa" scheme="http://blog.mog.name/tags/ReactiveCocoa/"/>
+    
+      <category term="FP" scheme="http://blog.mog.name/tags/FP/"/>
+    
+      <category term="FRP" scheme="http://blog.mog.name/tags/FRP/"/>
+    
+      <category term="函数式编程" scheme="http://blog.mog.name/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="响应式编程" scheme="http://blog.mog.name/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="函数响应编程" scheme="http://blog.mog.name/tags/%E5%87%BD%E6%95%B0%E5%93%8D%E5%BA%94%E7%BC%96%E7%A8%8B/"/>
+    
+  </entry>
   
   <entry>
     <title>ReactiveCocoa系列教程1-基本概念</title>
@@ -209,15 +287,15 @@
     
       <category term="ReactiveCocoa" scheme="http://blog.mog.name/tags/ReactiveCocoa/"/>
     
+      <category term="FP" scheme="http://blog.mog.name/tags/FP/"/>
+    
+      <category term="函数式编程" scheme="http://blog.mog.name/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/"/>
+    
       <category term="MVC" scheme="http://blog.mog.name/tags/MVC/"/>
     
       <category term="MVVM" scheme="http://blog.mog.name/tags/MVVM/"/>
     
       <category term="View-Model" scheme="http://blog.mog.name/tags/View-Model/"/>
-    
-      <category term="FP" scheme="http://blog.mog.name/tags/FP/"/>
-    
-      <category term="函数式编程" scheme="http://blog.mog.name/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
