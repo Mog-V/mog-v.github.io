@@ -83,9 +83,9 @@
     
       <category term="FP" scheme="http://blog.mog.name/tags/FP/"/>
     
-      <category term="FRP" scheme="http://blog.mog.name/tags/FRP/"/>
-    
       <category term="函数式编程" scheme="http://blog.mog.name/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="FRP" scheme="http://blog.mog.name/tags/FRP/"/>
     
       <category term="响应式编程" scheme="http://blog.mog.name/tags/%E5%93%8D%E5%BA%94%E5%BC%8F%E7%BC%96%E7%A8%8B/"/>
     
@@ -287,15 +287,15 @@
     
       <category term="ReactiveCocoa" scheme="http://blog.mog.name/tags/ReactiveCocoa/"/>
     
-      <category term="FP" scheme="http://blog.mog.name/tags/FP/"/>
-    
-      <category term="函数式编程" scheme="http://blog.mog.name/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="MVC" scheme="http://blog.mog.name/tags/MVC/"/>
     
       <category term="MVVM" scheme="http://blog.mog.name/tags/MVVM/"/>
     
       <category term="View-Model" scheme="http://blog.mog.name/tags/View-Model/"/>
+    
+      <category term="FP" scheme="http://blog.mog.name/tags/FP/"/>
+    
+      <category term="函数式编程" scheme="http://blog.mog.name/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
